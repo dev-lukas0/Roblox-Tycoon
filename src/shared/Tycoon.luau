@@ -1,4 +1,5 @@
 local Players = game:GetService("Players")
+local getNextBuyable = require(script.Parent.Buyables)
 local Tycoon = {}
 Tycoon.__index = Tycoon
 
@@ -23,6 +24,8 @@ function Tycoon.new(model: Model): Tycoon
 	local claimPart: BasePart = self.Model:FindFirstChild("Claim")
 	self.claimPart = claimPart
 
+	self:show_buyables()
+
 	return self
 end
 
@@ -45,7 +48,6 @@ function Tycoon:claim(hit)
 		return
 	end
 
-	-- Claim Tycoon
 	self.claimed = true
 	self.player = player
 	self.claimPart.Transparency = 0.5
@@ -70,6 +72,30 @@ function Tycoon:check_if_tycoon_is_claimed()
 	else
 		return true
 	end
+end
+
+function Tycoon:show_next_buyable()
+	local nextBuyableData = getNextBuyable(self.player)
+	if nextBuyableData and nextBuyableData.Part then
+		nextBuyableData.Part.Transparency = 0
+	end
+end
+
+function Tycoon:show_buyables()
+	task.spawn(function()
+		repeat
+			task.wait(0.2)
+		until self.claimed
+
+		while true do
+			local nextBuyable = getNextBuyable(self.player)
+			if not nextBuyable then
+				break
+			end
+			self:show_next_buyable()
+			task.wait(0.2)
+		end
+	end)
 end
 
 function Tycoon:destroy()

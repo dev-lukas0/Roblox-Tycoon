@@ -1,0 +1,6 @@
+{
+    "discord.detailsDebugging": "Debugging {file_name}",
+    "discord.lowerDetailsDebugging": "Debugging: {file_name}",
+    "discord.lowerDetailsEditing": "Workspace: {workspace}",
+    "discord.removeRemoteRepository": false
+}
