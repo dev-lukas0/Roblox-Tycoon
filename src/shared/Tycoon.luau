@@ -1,4 +1,5 @@
 local Players = game:GetService("Players")
+local Buyables = require(script.Parent.Buyables)
 local getNextBuyable = require(script.Parent.Buyables)
 local Tycoon = {}
 Tycoon.__index = Tycoon
@@ -75,9 +76,11 @@ function Tycoon:check_if_tycoon_is_claimed()
 end
 
 function Tycoon:show_next_buyable()
-	local nextBuyableData = getNextBuyable(self.player)
+	local nextBuyableData = Buyables.getNextBuyable(self.player)
 	if nextBuyableData and nextBuyableData.Part then
 		nextBuyableData.Part.Transparency = 0
+		nextBuyableData.Part.CanTouch = true
+		nextBuyableData.Part.CanCollide = true
 	end
 end
 
@@ -88,7 +91,7 @@ function Tycoon:show_buyables()
 		until self.claimed
 
 		while true do
-			local nextBuyable = getNextBuyable(self.player)
+			local nextBuyable = Buyables.getNextBuyable(self.player)
 			if not nextBuyable then
 				break
 			end

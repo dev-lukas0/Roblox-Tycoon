@@ -4,3 +4,4 @@ local cmdr = require(ReplicatedStorage.Packages.cmdr)
 
 cmdr:RegisterDefaultCommands()
 cmdr:RegisterCommand(ReplicatedStorage.Shared.commands.testcmd, ServerScriptService.Server.commands.testcmdServer)
+cmdr:RegisterCommand(ReplicatedStorage.Shared.commands.addcash, ServerScriptService.Server.commands.addcashServer)

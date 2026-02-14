@@ -4,7 +4,9 @@ local buyables = {
 
 local playerPurchases = {}
 
-function getNextBuyable(player)
+local BuyableModule = {}
+
+function BuyableModule.getNextBuyable(player)
 	playerPurchases[player.UserId] = playerPurchases[player.UserId] or {}
 	for i, item in ipairs(buyables) do
 		if not playerPurchases[player.UserId][i] then
@@ -14,4 +16,6 @@ function getNextBuyable(player)
 	return nil
 end
 
-return getNextBuyable
+BuyableModule.PlayerPurchases = playerPurchases
+
+return BuyableModule
