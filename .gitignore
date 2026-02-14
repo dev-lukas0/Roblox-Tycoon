@@ -1,0 +1,12 @@
+# Project place file
+/Tycoon.rbxlx
+
+# Dependency files
+/Packages/*
+/ServerPackages/*
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+
+sourcemap.json
