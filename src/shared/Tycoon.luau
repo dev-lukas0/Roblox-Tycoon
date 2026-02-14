@@ -7,55 +7,60 @@ type TycoonData = {
 	claimed: boolean,
 	connections: RBXScriptConnection,
 	player: Player,
+	claimPart: BasePart,
 }
 
 export type Tycoon = typeof(setmetatable({} :: TycoonData, Tycoon))
 
 function Tycoon.new(model: Model): Tycoon
 	local self = setmetatable({}, Tycoon)
-	local connections
-	local player
 
 	self.Model = model
 	self.claimed = false
-	self.connections = connections
-	self.player = player
+	self.connections = nil
+	self.player = nil
 
-	self:claim()
+	local claimPart: BasePart = self.Model:FindFirstChild("Claim")
+	self.claimPart = claimPart
 
 	return self
 end
 
 -- Claim a tycoon
-function Tycoon:claim()
-	self.claimPart = self.Model:FindFirstChild("Claim")
-	if self.claimPart and self.claimPart:IsA("BasePart") then
-		self.connections = self.claimPart.Touched:Connect(function(hit)
-			-- Check if the tycoon is already claimed on the touched event
-			if hit and self:check_if_tycoon_is_claimed() == false then
-				local humanoid = hit.Parent:FindFirstChildWhichIsA("Humanoid")
-				if humanoid then
-					local char = humanoid.Parent
-					local player = Players:GetPlayerFromCharacter(char)
-					self.claimed = true
-					self.claimPart.Transparency = 0.5
-					self.player = player
-					print(self.player.Name)
-				end
-			end
-		end)
-	else
-		print("Tycoon has already been claimed")
+function Tycoon:claim(hit)
+	if self.claimed == true then
 		return
 	end
+	if not hit then
+		return
+	end
+
+	local humanoid = hit.Parent:FindFirstChildWhichIsA("Humanoid")
+	if not humanoid then
+		return
+	end
+
+	local player = Players:GetPlayerFromCharacter(humanoid.Parent)
+	if not player then
+		return
+	end
+
+	-- Claim Tycoon
+	self.claimed = true
+	self.player = player
+	self.claimPart.Transparency = 0.5
+	self.claimPart.Name = "Claim"
+	print(player.Name)
 end
 
--- Unclaim the tycoon
+-- Unclaim a tycoon
 function Tycoon:unclaim()
-	if self.claimPart and self:check_if_tycoon_is_claimed() == true then
-		self.claimPart.Transparency = 0
-		self.claimed = false
+	if not self.claimPart then
+		return
 	end
+
+	self.claimPart.Transparency = 0
+	self.claimed = false
 end
 
 -- Returns whether the tycoon has already been claimed or not
